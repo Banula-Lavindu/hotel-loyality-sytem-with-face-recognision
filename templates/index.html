@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Detection</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        video {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Face Detection Attendance System</h1>
+    <div>
+        <img src="{{ url_for('video_feed') }}" width="640" height="480">
+    </div>
+</body>
+</html>

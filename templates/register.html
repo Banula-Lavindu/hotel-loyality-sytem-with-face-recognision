@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label, input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="email"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        #video-container {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 640px;
+            height: 480px;
+            overflow: hidden;
+            position: relative;
+        }
+        #video {
+            width: 100%;
+            height: 100%;
+        }
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            font-size: 2em;
+            display: none;
+        }
+        canvas {
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Register New User</h1>
+    <form method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <div id="video-container">
+            <img id="video" src="{{ url_for('video_feed', mode='registration') }}">
+            <div id="overlay"></div>
+        </div>
+        <canvas id="canvas" width="640" height="480"></canvas>
+        <button type="button" id="capture">Start Capture</button>
+        <input type="hidden" name="image_0" id="image_0">
+        <input type="hidden" name="image_1" id="image_1">
+        <input type="hidden" name="image_2" id="image_2">
+        <input type="hidden" name="image_3" id="image_3">
+        <input type="hidden" name="image_4" id="image_4">
+        <input type="hidden" name="image_5" id="image_5">
+        <input type="hidden" name="image_6" id="image_6">
+        <input type="hidden" name="image_7" id="image_7">
+        <input type="hidden" name="image_8" id="image_8">
+        <input type="hidden" name="image_9" id="image_9">
+        <input type="submit" value="Register">
+    </form>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const overlay = document.getElementById('overlay');
+        const captureButton = document.getElementById('capture');
+        const imageFields = [
+            document.getElementById('image_0'),
+            document.getElementById('image_1'),
+            document.getElementById('image_2'),
+            document.getElementById('image_3'),
+            document.getElementById('image_4'),
+            document.getElementById('image_5'),
+            document.getElementById('image_6'),
+            document.getElementById('image_7'),
+            document.getElementById('image_8'),
+            document.getElementById('image_9')
+        ];
+        let captureIndex = 0;
+
+        const messages = [
+            "Look straight ahead",
+            "Turn your head slightly to the left",
+            "Turn your head slightly to the right",
+            "Tilt your head up slightly",
+            "Tilt your head down slightly",
+            "Turn your head further to the left",
+            "Turn your head further to the right",
+            "Look straight ahead",
+            "Tilt your head up further",
+            "Tilt your head down further"
+        ];
+
+        function showMessage(message) {
+            overlay.innerText = message;
+            overlay.style.display = 'flex';
+        }
+
+        function hideMessage() {
+            overlay.style.display = 'none';
+        }
+
+        function captureImages() {
+            if (captureIndex >= imageFields.length) {
+                hideMessage();
+                alert('Captured the maximum number of images.');
+                return;
+            }
+
+            showMessage(messages[captureIndex]);
+            setTimeout(() => {
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = canvas.toDataURL('image/jpeg');
+                imageFields[captureIndex].value = imageData;
+                captureIndex++;
+                hideMessage();
+
+                if (captureIndex < imageFields.length) {
+                    setTimeout(captureImages, 500);
+                } else {
+                    alert('Image capture completed.');
+                }
+            }, 2000); // Simulate capture and analysis time
+        }
+
+        captureButton.addEventListener('click', () => {
+            captureIndex = 0;
+            captureImages();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Recognition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 {
+            color: #333;
+        }
+        #video-container {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 640px;
+            height: 480px;
+            overflow: hidden;
+            position: relative;
+        }
+        #video {
+            width: 100%;
+            height: 100%;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Live Face Recognition</h1>
+    <div id="video-container">
+        <img id="video" src="{{ url_for('video_feed') }}">
+    </div>
+    <button onclick="window.location.href='/'">Back to Dashboard</button>
+</body>
+</html>
